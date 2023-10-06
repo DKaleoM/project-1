@@ -13,11 +13,19 @@ A skeleton credentials file "credentials-skel.ini" is included.
 
 ## Research sources used:
 For python documentation references: python docs, w3 schools, and geeks for geeks
+
 https://docs.python.org/
+
 https://www.geeksforgeeks.org/
+
 https://www.w3schools.com/python/
+
 These sources were only used to check how certain python functions/language constructs work
+
 For http header format reference:
+
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages
+
 To complete the gitignore: git scm docs
+
 https://git-scm.com/docs/gitignore
