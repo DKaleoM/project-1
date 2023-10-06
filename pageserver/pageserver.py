@@ -93,14 +93,18 @@ def respond(sock):
 
     parts = request.split()
     if len(parts) > 1 and parts[0] == "GET":
-        
         #since parts[0] was get, parts[1] is the request target
         #which should be the file path since this is an HTTP get request
         #source I used to confirm that:
         #https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages
-        filePath = parts[1]
-
-        respondGet(sock,filePath)
+        if len(parts) == 1 or parts[1] == "/":
+            #return cat image on empty get request
+            transmit(STATUS_OK,sock)
+            transmit(CAT,sock)
+        else:
+            #there was a path requested
+            filePath = parts[1]
+            respondGet(sock,filePath)
         
     else:
         log.info("Unhandled request: {}".format(request))
@@ -128,20 +132,16 @@ def respondGet(sock, filePath):
     try:
         response = None
         with open(completeFilePath) as file:
+            #transmit file
             response = ""
             lines = file.readlines()
             for line in lines:
                 response += line
-            
-        if response == None:
-            #file has no contents we can transmit
-            transmit(STATUS_NOT_FOUND,sock)
-            transmit(message,sock) #message is file not found above
-            return
         transmit(STATUS_OK, sock)
         transmit(response,sock)
         return
     except:
+        #file opening and reading failed for some reason
         log.info("error opening file: "+completeFilePath);
         transmit(STATUS_NOT_FOUND,sock)
         transmit(message,sock) #message is file not found above
